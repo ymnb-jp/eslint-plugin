@@ -20,12 +20,13 @@ export const requireDataElement: TSESLint.RuleModule<'requireDataElement', []> =
           xmlMode: true,
           decodeEntities: false,
         })
-        const extendedData = $('ExtendedData')
+        const root = $('Placemark')
         const schemaData = $(
           'SchemaData[schemaUrl="http://schema.ymnb.jp/v1/schema.kml"]'
         )
 
         if (schemaData.length === 0) {
+          const extendedData = $('ExtendedData')
           const tag = `<SchemaData schemaUrl="http://schema.ymnb.jp/v1/schema.kml"></SchemaData>`
           context.report({
             node: node as unknown as TSESTree.Node,
@@ -34,7 +35,7 @@ export const requireDataElement: TSESLint.RuleModule<'requireDataElement', []> =
               if (extendedData.length > 0) {
                 extendedData.append(tag)
               } else {
-                $('Placemark').append(`<ExtendedData>${tag}</ExtendedData>`)
+                root.append(`<ExtendedData>${tag}</ExtendedData>`)
               }
               return fixer.replaceText(
                 node as unknown as TSESTree.Node,
