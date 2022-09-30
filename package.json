@@ -9,7 +9,8 @@
     "build": "tsc",
     "lint": "eslint . --ext ts",
     "lintfix": "eslint . --ext ts --fix",
-    "format": "prettier --write \"**/*.{js,ts,tsx,jsx,json,md,yml,yaml}\""
+    "format": "prettier --write \"**/*.{js,ts,tsx,jsx,json,md,yml,yaml}\"",
+    "prepare": "husky install"
   },
   "dependencies": {
     "@typescript-eslint/utils": "^5.38.1",
@@ -21,7 +22,13 @@
     "@typescript-eslint/parser": "^5.38.1",
     "eslint": "^8.24.0",
     "eslint-config-prettier": "^8.5.0",
+    "husky": ">=7",
+    "lint-staged": ">=10",
     "prettier": "^2.7.1",
     "typescript": "^4.8.4"
+  },
+  "lint-staged": {
+    "*.ts": "eslint --cache --fix",
+    "*.{js,ts,tsx,jsx,json,md,yml,yaml}": "prettier --write"
   }
 }
