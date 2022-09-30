@@ -1,5 +1,6 @@
 import { TSESLint } from '@typescript-eslint/utils'
 import { HTMLElement } from 'eslint-html-parser'
+import { load as loadXml } from 'cheerio'
 
 export const requireId: TSESLint.RuleModule<'requireId', []> = {
   meta: {
@@ -17,15 +18,10 @@ export const requireId: TSESLint.RuleModule<'requireId', []> = {
   defaultOptions: [],
   create: (context) => ({
     'HTMLElement[tagName="Placemark"]': (node: HTMLElement) => {
-      if (!node.attributes.find((n) => n.attributeName.value === 'id')) {
-        const nameNode: HTMLElement = node.children.find(
-          (n) => n.tagName === 'name'
-        )
-        const nameText: string | undefined = nameNode?.children.find(
-          (n) => n.type === 'HTMLText'
-        )?.value
-
-        const id = nameText || Math.floor(Math.random() * 1000000).toString()
+      const $ = loadXml(node.value)
+      if (!$.root().attr('id')) {
+        const id =
+          $('name').text() || Math.floor(Math.random() * 1000000).toString()
 
         context.report({
           loc: {
